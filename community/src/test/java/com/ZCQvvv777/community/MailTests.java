@@ -11,7 +11,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 /**
- * @Description TODO
+ * @Description 编写测试类MailTests，测试发送普通邮件及HTML邮件。
  * @Date 2022/8/18 10:51
  */
 

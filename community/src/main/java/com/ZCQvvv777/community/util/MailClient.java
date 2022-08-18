@@ -12,7 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
- * @Description TODO
+ * @Description 封装发送邮件的过程
  * @Date 2022/8/18 10:32
  */
 // 交给Spring管理
