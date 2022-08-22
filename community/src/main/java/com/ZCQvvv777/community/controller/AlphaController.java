@@ -1,13 +1,16 @@
 package com.ZCQvvv777.community.controller;
 
 import com.ZCQvvv777.community.service.AlphaService;
+import com.ZCQvvv777.community.util.CommunityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -87,6 +90,44 @@ public class AlphaController {
         mav.addObject("age", "30");
         mav.setViewName("/demo/view");
         return mav;
+    }
+
+    // cookie示例
+    @RequestMapping(path = "/cookies/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setCookies(HttpServletResponse response) {
+        // 创建cookie
+        Cookie cookie = new Cookie("code", CommunityUtil.generateUUID());
+        // 设置生效范围
+        cookie.setPath("/community/alpha");
+        // 设置生存时间
+        cookie.setMaxAge(60*10);// 10分钟
+        // 发送cookie
+        response.addCookie(cookie);
+
+        return "set cookie";
+    }
+
+    @RequestMapping(path = "cookies/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCookies(@CookieValue("code") String code) {
+        System.out.println(code);
+        return "get cookies";
+    }
+
+    @RequestMapping(path = "session/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String setSession(HttpSession session) {
+        session.setAttribute("id", 1);
+        session.setAttribute("name", "Test");
+        return "set session";
+    }
+    @RequestMapping(path = "session/get", method = RequestMethod.GET)
+    @ResponseBody
+    public String getSession(HttpSession session) {
+        System.out.println(session.getAttribute("id"));
+        System.out.println(session.getAttribute("name"));
+        return "get session";
     }
 
 }
