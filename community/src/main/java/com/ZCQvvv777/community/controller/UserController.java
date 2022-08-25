@@ -1,5 +1,6 @@
 package com.ZCQvvv777.community.controller;
 
+import com.ZCQvvv777.community.annotation.LoginRequired;
 import com.ZCQvvv777.community.entity.User;
 import com.ZCQvvv777.community.service.UserService;
 import com.ZCQvvv777.community.util.CommunityUtil;
@@ -50,12 +51,13 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
-
+    @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
