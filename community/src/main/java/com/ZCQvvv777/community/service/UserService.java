@@ -143,7 +143,7 @@ public class UserService implements CommunityConstant {
 
         // 验证密码
         password = CommunityUtil.md5(password + user.getSalt());
-        if (user.getPassword().equals(password)) {
+        if (!user.getPassword().equals(password)) {
             map.put("passwordMsg","密码不正确！");
             return map;
         }
@@ -182,7 +182,20 @@ public class UserService implements CommunityConstant {
     /**
      * 更新密码
      */
-    public int updatePassword (int userId, String password) {
-        return userMapper.updatePassword(userId, password);
+    public Map<String,Object> updatePassword(String oldPassword,String newPassword,int id){
+        Map<String,Object> map =new HashMap<>();
+        User user = userMapper.selectById(id);
+        oldPassword = CommunityUtil.md5(oldPassword + user.getSalt());
+        if(!user.getPassword().equals(oldPassword)){
+            map.put("passwordMsg","输入密码错误！");
+            return map;
+        }
+        else {//注意：存入新密码要以加密后的形式存进去
+            newPassword= CommunityUtil.md5(newPassword+user.getSalt());
+            userMapper.updatePassword(id,newPassword);
+        }
+
+        return map;
     }
+
 }

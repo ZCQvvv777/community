@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * @Description
@@ -113,4 +113,40 @@ public class UserController {
             logger.error("读取头像失败：" + e.getMessage());
         }
     }
+
+    // 更新密码
+//这里形参用Model类和User类即可，SpringMVC会把传入内容按照User属性填入user
+    @RequestMapping(path = "/setting", method = RequestMethod.POST)
+    public String updatePassword(Model model, String oldPassword,String newPassword,String confirmPassword) {
+        if(StringUtils.isBlank(oldPassword)){
+            model.addAttribute("passwordMsg","请输入原始密码！");
+            return "/site/setting";
+        }
+        if(StringUtils.isBlank(newPassword)){
+            model.addAttribute("newPasswordMsg","请输入新密码！");
+            return "/site/setting";
+        }
+        if(StringUtils.isBlank(confirmPassword)){
+            model.addAttribute("confirmPasswordMsg","请再次输入新密码！");
+            return "/site/setting";
+        }
+        if(!confirmPassword.equals(newPassword)){
+            model.addAttribute("newPasswordMsg","两次输入的新密码不相同！");
+            return "/site/setting";
+        }
+        User user=hostHolder.getUser();
+        Map<String, Object> map = userService.updatePassword(oldPassword,newPassword,user.getId());
+        if (map == null || map.isEmpty()) {
+            //传给templates注册成功信息
+            model.addAttribute("msg", "密码修改成功");
+            //跳到回个人设置页面
+            model.addAttribute("target", "/user/setting");
+            return "redirect:/logout";
+        }else {
+            //失败了传失败信息，跳到到原来的页面
+            model.addAttribute("passwordMsg","密码修改错误");
+            return "/site/setting";
+        }
+    }
+
 }
