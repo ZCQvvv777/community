@@ -16,6 +16,7 @@ public interface DiscussPostMapper {
     int selectDiscussPostRows(@Param("userId") int userId);
 
 
+    // 帖子详情
     DiscussPost selectDiscussPostById(int id);
 
     int updateCommentCount(int id, int commentCount);
